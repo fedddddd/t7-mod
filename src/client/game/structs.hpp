@@ -334,21 +334,29 @@ namespace game
 		DVAR_FLAG_READ = 0x2000,
 	};
 
-	enum dvar_type : std::int8_t
+	enum dvarType_t
 	{
-		boolean = 0,
-		value = 1,
-		vec2 = 2,
-		vec3 = 3,
-		vec4 = 4,
-		integer = 5,
-		enumeration = 6,
-		string = 7,
-		color = 8,
-		rgb = 9 // Color without alpha
+		DVAR_TYPE_INVALID = 0x0,
+		DVAR_TYPE_BOOL = 0x1,
+		DVAR_TYPE_FLOAT = 0x2,
+		DVAR_TYPE_FLOAT_2 = 0x3,
+		DVAR_TYPE_FLOAT_3 = 0x4,
+		DVAR_TYPE_FLOAT_4 = 0x5,
+		DVAR_TYPE_INT = 0x6,
+		DVAR_TYPE_ENUM = 0x7,
+		DVAR_TYPE_STRING = 0x8,
+		DVAR_TYPE_COLOR = 0x9,
+		DVAR_TYPE_INT64 = 0xA,
+		DVAR_TYPE_UINT64 = 0xB,
+		DVAR_TYPE_LINEAR_COLOR_RGB = 0xC,
+		DVAR_TYPE_COLOR_XYZ = 0xD,
+		DVAR_TYPE_COLOR_LAB = 0xE,
+		DVAR_TYPE_SESSIONMODE_BASE_DVAR = 0xF,
+		DVAR_TYPE_COUNT = 0x10,
 	};
 
-	union dvar_value
+
+	union DvarValue
 	{
 		bool enabled;
 		int integer;
@@ -377,7 +385,7 @@ namespace game
 		float max;
 	};
 
-	union dvar_limits
+	union DvarLimits
 	{
 		$A37BA207B3DDD6345C554D4661813EDD enumeration;
 		$9CA192F9DB66A3CB7E01DE78A0DEA53D integer;
@@ -385,16 +393,21 @@ namespace game
 		$251C2428A496074035CACA7AAF3D55BD vector;
 	};
 
+	using dvarStrHash_t = unsigned int;
+
 	struct dvar_t
 	{
-		int name; //00
-		unsigned int flags; //08
-		dvar_type type; //0C
-		bool modified; //0D
-		dvar_value current; //10
-		dvar_value latched;
-		dvar_value reset;
-		dvar_limits domain;
+		dvarStrHash_t hash;
+		const char* debugName;
+		const char* description;
+		unsigned int flags;
+		dvarType_t type;
+		bool modified;
+		DvarValue current;
+		DvarValue latched;
+		DvarValue reset;
+		DvarLimits domain;
+		dvar_t* hashNext;
 	};
 
 	struct ScreenPlacement
@@ -420,9 +433,16 @@ namespace game
 		int nesting;
 		int localClientNum[8];
 		int controllerIndex[8];
+		int argshift[8];
 		int argc[8];
 		const char** argv[8];
+		char textPool[8192];
+		const char* argvPool[512];
+		int usedTextPool[8];
+		int totalUsedArgvPool;
+		int totalUsedTextPool;
 	};
+
 
 	struct cmd_function_s
 	{
@@ -914,7 +934,16 @@ namespace game
 		uint64_t streams[4];
 		const char* name;
 	};
-	
+
+	struct TLSData
+	{
+		void* vaInfo;
+		jmp_buf* errorJmpBuf;
+		void* traceInfo;
+		CmdArgs* cmdArgs;
+		void* errorData;
+	};
+
 	namespace hks
 	{
 		struct GenericChunkHeader

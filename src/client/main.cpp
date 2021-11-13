@@ -20,7 +20,7 @@ BOOL WINAPI system_parameters_info_a(const UINT uiAction, const UINT uiParam, co
 
 FARPROC WINAPI get_proc_address(const HMODULE hModule, const LPCSTR lpProcName)
 {
-	if (lpProcName == "InitializeCriticalSectionEx"s)
+	if (lpProcName == "GetLogicalProcessorInformation"s)
 	{
 		component_loader::post_unpack();
 	}

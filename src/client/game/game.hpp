@@ -31,6 +31,13 @@ namespace game
 	private:
 		T* address_;
 	};
+
+	struct cmd_args_t
+	{
+		CmdArgs* operator->() const;
+	};
+
+	extern cmd_args_t cmd_args;
 }
 
 #include "symbols.hpp"

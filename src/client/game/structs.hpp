@@ -1070,14 +1070,6 @@ namespace game
 
 		enum HksError
 		{
-			HKS_NO_ERROR = 0x0,
-			LUA_ERRSYNTAX = 0xFFFFFFFC,
-			LUA_ERRFILE = 0xFFFFFFFB,
-			LUA_ERRRUN = 0xFFFFFF9C,
-			LUA_ERRMEM = 0xFFFFFF38,
-			LUA_ERRERR = 0xFFFFFED4,
-			HKS_THROWING_ERROR = 0xFFFFFE0C,
-			HKS_GC_YIELD = 0x1,
 		};
 
 		struct lua_Debug

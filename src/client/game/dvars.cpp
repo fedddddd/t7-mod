@@ -5,6 +5,8 @@
 
 namespace dvars
 {
+	game::dvar_t* cg_legacyCrashHandling;
+
 	std::string dvar_get_vector_domain(const int components, const game::DvarLimits& domain)
 	{
 		if (domain.vector.min == -FLT_MAX)
@@ -108,23 +110,23 @@ namespace dvars
 	}
 
 	game::dvar_t* register_int(const std::string& name, int value, int min, int max, 
-		game::DvarFlags flags)
+		game::DvarFlags flags, const std::string& description)
 	{
 		const auto hash = game::Dvar_GenerateHash(name.data());
-		return game::Dvar_RegisterInt(hash, "", value, min, max, flags, "");
+		return game::Dvar_RegisterInt(hash, "", value, min, max, flags, description.data());
 	}
 
 	game::dvar_t* register_bool(const std::string& name, bool value, 
-		game::DvarFlags flags)
+		game::DvarFlags flags, const std::string& description)
 	{
 		const auto hash = game::Dvar_GenerateHash(name.data());
-		return game::Dvar_RegisterBool(hash, "", value, flags, "");
+		return game::Dvar_RegisterBool(hash, "", value, flags, description.data());
 	}
 
 	game::dvar_t* register_float(const std::string& name, float value, float min, 
-		float max, game::DvarFlags flags)
+		float max, game::DvarFlags flags, const std::string& description)
 	{
 		const auto hash = game::Dvar_GenerateHash(name.data());
-		return game::Dvar_RegisterFloat(hash, "", value, min, max, flags, "");
+		return game::Dvar_RegisterFloat(hash, "", value, min, max, flags, description.data());
 	}
 }

@@ -673,30 +673,51 @@ namespace game
 		int freeFlags;
 	};
 
-	enum scr_string_t
+	typedef uint32_t scr_string_t;
+	typedef uint32_t ScrVarCanonicalName_t;
+	typedef uint64_t ScrVarNameIndex_t;
+	typedef uint32_t ScrVarIndex_t;
+
+	union EntRefUnion
 	{
-		scr_string_t_dummy = 0x0,
+		int32_t entnum;
+		uint32_t hudElemIndex;
+		uint32_t pathNodeIndex;
+		__int16 vehicleNodeIndex;
+		unsigned int absDynEntIndex;
+		unsigned int weapon;
+		uint64_t val;
 	};
 
 	struct scr_entref_t
 	{
-		unsigned short entnum;
-		unsigned short classnum;
+		EntRefUnion u;
+		unsigned __int16 classnum;
+		int client;
 	};
 
 	enum scriptType_e
 	{
-		SCRIPT_NONE = 0,
-		SCRIPT_OBJECT = 1,
-		SCRIPT_STRING = 2,
-		SCRIPT_ISTRING = 3,
-		SCRIPT_VECTOR = 4,
-		SCRIPT_FLOAT = 5,
-		SCRIPT_INTEGER = 6,
-		SCRIPT_END = 8,
-		SCRIPT_FUNCTION = 9,
-		SCRIPT_STRUCT = 19,
-		SCRIPT_ARRAY = 22,
+		SCRIPT_NONE = 0x0,
+		SCRIPT_OBJECT = 0x1,
+		SCRIPT_STRING = 0x2,
+		SCRIPT_ISTRING = 0x3,
+		SCRIPT_VECTOR = 0x4,
+		SCRIPT_HASH = 0x5,
+		SCRIPT_FLOAT = 0x6,
+		SCRIPT_INTEGER = 0x7,
+		SCRIPT_UINT64 = 0x8,
+		SCRIPT_UINTPTR = 0x9,
+		SCRIPT_ENTITY_OFFSET = 0xA,
+		SCRIPT_CODEPOS = 0xB,
+		SCRIPT_PRECODEPOS = 0xC,
+		SCRIPT_END = 0xC,
+		SCRIPT_API_FUNCTION = 0xD,
+		SCRIPT_FUNCTION = 0xE,
+		SCRIPT_CLASS = 0x15,
+		SCRIPT_STRUCT = 0x16,
+		SCRIPT_ENTITY = 0x18,
+		SCRIPT_ARRAY = 0x19,
 	};
 
 	struct VariableStackBuffer
@@ -709,17 +730,25 @@ namespace game
 		char buf[1];
 	};
 
+	struct $A5CF6DB4A6ADBC8C5927C15254465441
+	{
+		ScrVarIndex_t firstChild;
+		ScrVarIndex_t lastChild;
+	};
+
 	union VariableUnion
 	{
 		int intValue;
 		unsigned int uintValue;
+		uint64_t uint64Value;
+		uintptr_t uintptrValue;
 		float floatValue;
-		unsigned int stringValue;
+		scr_string_t stringValue;
 		const float* vectorValue;
-		const char* codePosValue;
-		unsigned int pointerValue;
-		VariableStackBuffer* stackValue;
-		unsigned int entityOffset;
+		byte* codePosValue;
+		ScrVarIndex_t pointerValue;
+		void* stackValue;
+		$A5CF6DB4A6ADBC8C5927C15254465441 _anon_0;
 	};
 
 	struct VariableValue
@@ -750,10 +779,46 @@ namespace game
 		int function_count;
 		function_frame_t* function_frame;
 		VariableValue* top;
+		bool debugCode;
+		bool abort_on_error;
+		bool terminal_error;
+		bool block_execution;
+		int callNesting;
+		char __pad0[0x4];
 		unsigned int inparamcount;
 		unsigned int outparamcount;
-		function_frame_t function_frame_start[32];
+		unsigned int breakpointOutparamcount;
+		bool showError;
+		function_frame_t function_frame_start[64];
 		VariableValue stack[2048];
+		void* notifyListeners[1];
+	};
+
+	struct scrVarPub_t
+	{
+		const char* fieldBuffer;
+		bool developer;
+		bool evaluate;
+		const char* error_message;
+		unsigned int time;
+		ScrVarIndex_t timeArrayId;
+		ScrVarIndex_t pauseArrayId;
+		ScrVarIndex_t worldId;
+		ScrVarIndex_t classesId;
+		ScrVarIndex_t levelId;
+		ScrVarIndex_t gameId;
+		ScrVarIndex_t animId;
+		ScrVarIndex_t freeEntList;
+		ScrVarIndex_t tempVariable;
+		bool bInited;
+		unsigned int checksum;
+		unsigned int entId;
+		ScrVarNameIndex_t entFieldNameIndex;
+		void* programHunkUser;
+		byte* programBuffer;
+		byte* endScriptBuffer;
+		unsigned int numVarAllocations;
+		unsigned int numScriptThreads;
 	};
 
 	struct scr_classStruct_t
@@ -846,13 +911,58 @@ namespace game
 		ObjectVariableValue_w w;
 	};
 
+	struct $7756768FEBCA8CCDF9346D2E80B44A7C
+	{
+		unsigned __int32 nameType : 3;
+		unsigned __int32 flags : 5;
+		unsigned __int32 refCount : 24;
+	};
+
+	union $0D197BE94566DA31B1328C69A6F47965
+	{
+		uint64_t object_o;
+		unsigned int size;
+		EntRefUnion entRefUnion;
+		unsigned int nextEntId;
+		unsigned int self;
+		unsigned int free;
+	};
+
+	struct ScrVarEntityInfo_t
+	{
+		unsigned __int16 classnum;
+		unsigned __int16 clientNum;
+	};
+
+	union $E3148709B66F567074DED75909FF6305
+	{
+		ScrVarIndex_t object_w;
+		ScrVarEntityInfo_t varEntityInfo;
+		ScrVarCanonicalName_t notifyName;
+		ScrVarIndex_t waitTime;
+	};
+
+	struct ScrVar_t
+	{
+		VariableValue value;
+		$7756768FEBCA8CCDF9346D2E80B44A7C _anon_0;
+		$0D197BE94566DA31B1328C69A6F47965 o;
+		ScrVar_t::$E3148709B66F567074DED75909FF6305 w;
+		ScrVarNameIndex_t nameIndex;
+		ScrVarIndex_t nextSibling;
+		ScrVarIndex_t prevSibling;
+		ScrVarIndex_t parentId;
+		ScrVarIndex_t nameSearchHashList;
+	};
+
+
 	struct scrVarGlob_t
 	{
-		ObjectVariableValue objectVariableValue[56320];
-		ObjectVariableChildren objectVariableChildren[56320];
-		unsigned __int16 childVariableBucket[65536];
-		ChildVariableValue childVariableValue[384000];
+		scrVarGlob_t* scriptNameSearchHashList;
+		char __pad0[128];
+		ScrVar_t* scriptVariables;
 	};
+
 
 	enum GfxDrawSceneMethod
 	{

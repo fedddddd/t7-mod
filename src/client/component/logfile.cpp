@@ -15,7 +15,6 @@ namespace logfile
 	namespace
 	{
 		game::dvar_t* g_log;
-		utils::hook::detour g_log_printf_hook;
 
 		void g_log_printf_stub(const char* fmt, ...)
 		{
@@ -47,7 +46,7 @@ namespace logfile
 	public:
 		void post_unpack() override
 		{
-			g_log_printf_hook.create(0x1402A7BB0, g_log_printf_stub);
+			utils::hook::jump(0x1402A7BB0, g_log_printf_stub, true);
 			utils::hook::call(0x1402A82D6, register_g_log_stub);
 			utils::hook::jump(0x1402AC00E, 0x1402AC061, true);
 		}

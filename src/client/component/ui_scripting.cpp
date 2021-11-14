@@ -23,7 +23,6 @@ namespace ui_scripting
 		utils::hook::detour startup2_hook;
 		utils::hook::detour error_shutdown_hook;
 		utils::hook::detour hksi_lual_error_hook;
-		utils::hook::detour hksi_lual_error_hook2;
 
 		bool error_hook_enabled = false;
 
@@ -136,6 +135,7 @@ namespace ui_scripting
 			startup_hook.create(0x1404A0A50, startup_stub);
 			startup2_hook.create(0x1404A1F50, startup2_stub);
 			error_shutdown_hook.create(0x1404A1280, error_shutdown_stub);
+			hksi_lual_error_hook.create(0x1403F5BA0, hksi_lual_error_stub);
 
 			scheduler::loop(lua::engine::run_frame, scheduler::pipeline::main);
 		}

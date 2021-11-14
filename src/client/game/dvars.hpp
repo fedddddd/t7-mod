@@ -15,6 +15,8 @@ namespace dvars
 							   game::DvarFlags flags, const std::string& description);
 	game::dvar_t* register_bool(const std::string& name, bool value, 
 								game::DvarFlags flags, const std::string& description);
+	game::dvar_t* register_string(const std::string& name, const std::string& value,
+								  game::DvarFlags flags, const std::string& description);
 	game::dvar_t* register_float(const std::string& name, float value, float min, float max, 
 								 game::DvarFlags flags, const std::string& description);
 }

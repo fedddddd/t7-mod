@@ -26,6 +26,8 @@ namespace game
 
 	WEAK symbol<DWORD> threadIds{0x14A0368B0};
 
+	WEAK symbol<int> level_time{0x1474FDC94};
+
 	namespace hks
 	{
 		WEAK symbol<lua_State*> lua_state{0x14858C408};

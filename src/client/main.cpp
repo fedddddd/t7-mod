@@ -56,7 +56,7 @@ FARPROC load_binary()
 	if (!utils::io::read_file(binary, &data))
 	{
 		throw std::runtime_error(utils::string::va(
-			"Failed to read game binary (%s)!\nPlease copy the h2-mod.exe into your Call of Duty Black Ops III/UnrankedServer installation folder and run it from there.",
+			"Failed to read game binary (%s)!\nPlease copy the t7-mod.exe into your Call of Duty Black Ops III/UnrankedServer installation folder and run it from there.",
 			binary));
 	}
 

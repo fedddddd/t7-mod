@@ -1,6 +1,6 @@
 #include <std_include.hpp>
 
-#pragma comment(linker, "/base:0x7FFF00000000")
+#pragma comment(linker, "/base:0x150000000")
 
 extern "C"
 {

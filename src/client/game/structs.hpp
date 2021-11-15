@@ -947,7 +947,7 @@ namespace game
 		VariableValue value;
 		$7756768FEBCA8CCDF9346D2E80B44A7C _anon_0;
 		$0D197BE94566DA31B1328C69A6F47965 o;
-		ScrVar_t::$E3148709B66F567074DED75909FF6305 w;
+		$E3148709B66F567074DED75909FF6305 w;
 		ScrVarNameIndex_t nameIndex;
 		ScrVarIndex_t nextSibling;
 		ScrVarIndex_t prevSibling;

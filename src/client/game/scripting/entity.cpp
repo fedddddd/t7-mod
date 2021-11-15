@@ -69,8 +69,8 @@ namespace scripting
 	{
 		if (!this->entity_id_)
 		{
-			const auto not_null = static_cast<uint16_t>(~0ui16);
-			return game::scr_entref_t{not_null, not_null};
+			const auto not_null = static_cast<uint32_t>(~0ui16);
+			return game::scr_entref_t{not_null, 0, 0};
 		}
 
 		return game::Scr_GetEntityIdRef(0, this->get_entity_id());

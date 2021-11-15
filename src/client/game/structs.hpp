@@ -680,7 +680,7 @@ namespace game
 
 	union EntRefUnion
 	{
-		int32_t entnum;
+		uint32_t entnum;
 		uint32_t hudElemIndex;
 		uint32_t pathNodeIndex;
 		__int16 vehicleNodeIndex;
